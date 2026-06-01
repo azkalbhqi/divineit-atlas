@@ -369,6 +369,52 @@ export async function createProject(
   return insertedProject;
 }
 
+// Update a project
+export async function updateProject(
+  id: string,
+  data: {
+    name: string;
+    description: string;
+    client_name: string;
+    start_date: string;
+    end_date: string;
+    total_budget: number;
+  }
+): Promise<Project> {
+  const { data: updatedProject, error } = await supabase
+    .from("projects")
+    .update({
+      name: data.name,
+      description: data.description,
+      client_name: data.client_name,
+      start_date: data.start_date,
+      end_date: data.end_date,
+      total_budget: Number(data.total_budget),
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error || !updatedProject) {
+    throw new Error("Failed to update project: " + (error?.message || "Unknown error"));
+  }
+
+  await syncProjectTotalCost(id);
+  return updatedProject;
+}
+
+// Delete a project
+export async function deleteProject(id: string): Promise<void> {
+  const { error } = await supabase
+    .from("projects")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    throw new Error("Failed to delete project: " + error.message);
+  }
+}
+
 // Update project links
 export async function updateProjectLinks(
   projectId: string,
@@ -720,3 +766,112 @@ export async function deleteUser(id: string): Promise<void> {
     throw new Error("Failed to delete user account: " + error.message);
   }
 }
+
+// Update project time log
+export async function updateProjectTimeLog(
+  logId: string,
+  hours: number,
+  description: string
+): Promise<ProjectTimeLog> {
+  const { data: existingLog } = await supabase
+    .from("project_time_logs")
+    .select("project_id")
+    .eq("id", logId)
+    .single();
+
+  const { data: updatedLog, error } = await supabase
+    .from("project_time_logs")
+    .update({
+      hours: Number(hours),
+      description,
+    })
+    .eq("id", logId)
+    .select()
+    .single();
+
+  if (error || !updatedLog) {
+    throw new Error("Failed to update time log: " + (error?.message || "Unknown error"));
+  }
+
+  if (existingLog) {
+    await syncProjectTotalCost(existingLog.project_id);
+  }
+  return updatedLog as ProjectTimeLog;
+}
+
+// Delete project time log
+export async function deleteProjectTimeLog(logId: string): Promise<void> {
+  const { data: existingLog } = await supabase
+    .from("project_time_logs")
+    .select("project_id")
+    .eq("id", logId)
+    .single();
+
+  const { error } = await supabase
+    .from("project_time_logs")
+    .delete()
+    .eq("id", logId);
+
+  if (error) {
+    throw new Error("Failed to delete time log: " + error.message);
+  }
+
+  if (existingLog) {
+    await syncProjectTotalCost(existingLog.project_id);
+  }
+}
+
+// Update roster member
+export async function updateRosterMember(
+  rosterId: string,
+  projectRole: string,
+  hourlyRate: number
+): Promise<ProjectUser> {
+  const { data: existing } = await supabase
+    .from("project_users")
+    .select("project_id")
+    .eq("id", rosterId)
+    .single();
+
+  const { data: updatedRoster, error } = await supabase
+    .from("project_users")
+    .update({
+      project_role: projectRole,
+      hourly_rate: Number(hourlyRate),
+    })
+    .eq("id", rosterId)
+    .select()
+    .single();
+
+  if (error || !updatedRoster) {
+    throw new Error("Failed to update roster member: " + (error?.message || "Unknown error"));
+  }
+
+  if (existing) {
+    await syncProjectTotalCost(existing.project_id);
+  }
+  return updatedRoster as ProjectUser;
+}
+
+// Delete roster member
+export async function deleteRosterMember(rosterId: string): Promise<void> {
+  const { data: existing } = await supabase
+    .from("project_users")
+    .select("project_id")
+    .eq("id", rosterId)
+    .single();
+
+  const { error } = await supabase
+    .from("project_users")
+    .delete()
+    .eq("id", rosterId);
+
+  if (error) {
+    throw new Error("Failed to delete roster member: " + error.message);
+  }
+
+  if (existing) {
+    await syncProjectTotalCost(existing.project_id);
+  }
+}
+
