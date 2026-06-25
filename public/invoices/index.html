@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvoiceFly - Premium Browser-Based Invoice Generator</title>
+  <meta name="description" content="Generate professional invoices completely client-side. Download as high-quality A4 PDFs. No server required.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- html2pdf.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header>
+    <div class="brand-container">
+      <div class="brand-icon">I</div>
+      <div class="brand-name">InvoiceFly</div>
+    </div>
+
+    <div class="header-controls">
+      <!-- Action buttons -->
+      <button class="btn btn-secondary btn-icon-only" id="theme-toggle-btn" title="Toggle Theme">
+        <i data-lucide="sun"></i>
+      </button>
+      <button class="btn btn-primary" id="btn-download-pdf">
+        <i data-lucide="download"></i> Download PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- App Main Content Area -->
+  <div class="app-container">
+    
+    <!-- Left Column: Invoice Form Controls -->
+    <section class="editor-section">
+      <div class="card-group">
+        
+        <!-- Document Meta Details -->
+        <div class="card">
+          <h2 class="card-title"><i data-lucide="file-text"></i> Invoice Details</h2>
+          <div class="grid-2">
+            <div class="form-group" id="group-invoice-number">
+              <div class="field-label-container">
+                <label for="invoice-number">Invoice Number</label>
+                <button type="button" class="field-toggle-btn" data-field="invoiceNumber" title="Toggle Invoice Number">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="text" id="invoice-number" value="INV-0001" placeholder="e.g. INV-1002">
+            </div>
+            <div class="form-group" id="group-currency">
+              <div class="field-label-container">
+                <label for="currency-selector">Currency</label>
+              </div>
+              <select id="currency-selector">
+                <option value="IDR" data-symbol="Rp" selected>IDR (Rp)</option>
+                <option value="USD" data-symbol="$">USD ($)</option>
+                <option value="EUR" data-symbol="€">EUR (€)</option>
+                <option value="GBP" data-symbol="£">GBP (£)</option>
+                <option value="JPY" data-symbol="¥">JPY (¥)</option>
+                <option value="SGD" data-symbol="S$">SGD (S$)</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div class="form-group" id="group-issue-date">
+              <div class="field-label-container">
+                <label for="issue-date">Issue Date</label>
+                <button type="button" class="field-toggle-btn" data-field="issueDate" title="Toggle Issue Date">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="date" id="issue-date">
+            </div>
+            <div class="form-group" id="group-due-date">
+              <div class="field-label-container">
+                <label for="due-date">Due Date</label>
+                <button type="button" class="field-toggle-btn" data-field="dueDate" title="Toggle Due Date">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="date" id="due-date">
+            </div>
+            <div class="form-group" id="group-payment-terms">
+              <div class="field-label-container">
+                <label for="payment-terms">Terms</label>
+                <button type="button" class="field-toggle-btn" data-field="paymentTerms" title="Toggle Terms">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="text" id="payment-terms" value="Due on Receipt" placeholder="e.g. Net 30">
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="form-group no-margin">
+              <label>Header Title Position</label>
+              <select id="setting-header-position" class="layout-setting">
+                <option value="right" selected>Right (Default)</option>
+                <option value="left">Left</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Customize Fields Card -->
+        <div class="card">
+          <h2 class="card-title"><i data-lucide="sliders"></i> Customize Fields</h2>
+          <div class="grid-3" style="gap: 12px 16px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-logo" checked style="width: auto; margin-right: 2px;"> Logo
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-qr" checked style="width: auto; margin-right: 2px;"> QR Code
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-qty" checked style="width: auto; margin-right: 2px;"> Qty Column
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-rate" checked style="width: auto; margin-right: 2px;"> Rate Column
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-tax" checked style="width: auto; margin-right: 2px;"> Tax Columns
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-discount" checked style="width: auto; margin-right: 2px;"> Discount
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-shipping" checked style="width: auto; margin-right: 2px;"> Shipping
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-payment" checked style="width: auto; margin-right: 2px;"> Payment Info
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-size: 13px; font-weight: 500;">
+              <input type="checkbox" id="show-notes" checked style="width: auto; margin-right: 2px;"> Notes
+            </label>
+          </div>
+        </div>
+
+        <!-- Sender / Business Info -->
+        <div class="card">
+          <h2 class="card-title"><i data-lucide="building"></i> Sender Information (You)</h2>
+          <div class="grid-2">
+            <div class="form-group" id="group-sender-logo">
+              <div class="field-label-container">
+                <label for="sender-logo">Company Logo</label>
+                <button type="button" class="field-toggle-btn" data-field="showLogo" title="Toggle Logo">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <div class="logo-upload-wrapper">
+                <div class="logo-upload-placeholder" id="logo-placeholder">
+                  <i data-lucide="image"></i>
+                  <span>Click or drag logo image here</span>
+                </div>
+                <div class="logo-preview-container" id="logo-preview-box">
+                  <button type="button" class="btn-remove-logo" id="remove-logo-btn" title="Remove logo">×</button>
+                  <img src="" alt="Logo Preview" class="logo-preview-img" id="logo-preview-img">
+                </div>
+                <input type="file" id="sender-logo" accept="image/*">
+              </div>
+            </div>
+            <div class="form-group" id="group-sender-name">
+              <div class="field-label-container">
+                <label for="sender-name">Business Name</label>
+                <button type="button" class="field-toggle-btn" data-field="senderName" title="Toggle Business Name">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="text" id="sender-name" value="diviteit studio" placeholder="Your Business Name">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group" id="group-sender-email">
+              <div class="field-label-container">
+                <label for="sender-email">Email Address</label>
+                <button type="button" class="field-toggle-btn" data-field="senderEmail" title="Toggle Email">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="email" id="sender-email" value="hello@diviteit.com" placeholder="email@yourdomain.com">
+            </div>
+            <div class="form-group" id="group-sender-phone">
+              <div class="field-label-container">
+                <label for="sender-phone">Phone Number</label>
+                <button type="button" class="field-toggle-btn" data-field="senderPhone" title="Toggle Phone">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="text" id="sender-phone" value="+62 812-3456-7890" placeholder="+62 ...">
+            </div>
+          </div>
+          <div class="form-group" id="group-sender-address">
+            <div class="field-label-container">
+              <label for="sender-address">Address</label>
+              <button type="button" class="field-toggle-btn" data-field="senderAddress" title="Toggle Address">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <textarea id="sender-address" placeholder="Sudirman Central Business District&#10;Jakarta, Indonesia">Sudirman Central Business District&#10;Jakarta, Indonesia</textarea>
+          </div>
+          <div class="settings-row">
+            <div class="form-group no-margin">
+              <label>Sender Text Align</label>
+              <select id="setting-sender-align" class="layout-setting">
+                <option value="left" selected>Left (Default)</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Client Info -->
+        <div class="card">
+          <h2 class="card-title"><i data-lucide="users"></i> Client Information (Bill To)</h2>
+          <div class="grid-2">
+            <div class="form-group" id="group-client-name">
+              <div class="field-label-container">
+                <label for="client-name">Client Name</label>
+                <button type="button" class="field-toggle-btn" data-field="clientName" title="Toggle Client Name">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="text" id="client-name" placeholder="Client Name or Company">
+            </div>
+            <div class="form-group" id="group-client-email">
+              <div class="field-label-container">
+                <label for="client-email">Email Address</label>
+                <button type="button" class="field-toggle-btn" data-field="clientEmail" title="Toggle Client Email">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="email" id="client-email" placeholder="client@domain.com">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group" id="group-client-phone">
+              <div class="field-label-container">
+                <label for="client-phone">Phone Number</label>
+                <button type="button" class="field-toggle-btn" data-field="clientPhone" title="Toggle Client Phone">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="text" id="client-phone" placeholder="Client Phone">
+            </div>
+            <div class="form-group" id="group-client-address">
+              <div class="field-label-container">
+                <label for="client-address">Address</label>
+                <button type="button" class="field-toggle-btn" data-field="clientAddress" title="Toggle Client Address">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <textarea id="client-address" placeholder="456 Client St&#10;Apartment 2B&#10;San Francisco, CA 94103"></textarea>
+            </div>
+          </div>
+          <div class="settings-row grid-2">
+            <div class="form-group no-margin">
+              <label>Client Text Align</label>
+              <select id="setting-client-align" class="layout-setting">
+                <option value="left" selected>Left (Default)</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+            <div class="form-group no-margin">
+              <label>Address Block Order</label>
+              <select id="setting-address-order" class="layout-setting">
+                <option value="normal" selected>Sender Left, Client Right</option>
+                <option value="reverse">Client Left, Sender Right</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Line Items -->
+        <div class="card">
+          <h2 class="card-title"><i data-lucide="shopping-cart"></i> Line Items</h2>
+          <div class="items-list-container" id="items-container">
+            <!-- Dynamically populated via JS -->
+          </div>
+          <button class="btn btn-secondary" id="add-item-btn" style="width: 100%;">
+            <i data-lucide="plus"></i> Add Line Item
+          </button>
+        </div>
+
+        <!-- Taxes, Discount, Shipping & Total adjustments + QR Code upload -->
+        <div class="card">
+          <h2 class="card-title"><i data-lucide="calculator"></i> Calculations, QR Code & Notes</h2>
+          
+          <div class="form-group" id="group-qr-code" style="margin-bottom: 20px;">
+            <div class="field-label-container">
+              <label for="qr-code-file">Payment QR Code Image</label>
+              <button type="button" class="field-toggle-btn" data-field="showQr" title="Toggle QR Code">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <div class="logo-upload-wrapper">
+              <div class="logo-upload-placeholder" id="qr-placeholder">
+                <i data-lucide="qr-code"></i>
+                <span>Click or drag Payment QR image here (optional)</span>
+              </div>
+              <div class="logo-preview-container" id="qr-preview-box">
+                <button type="button" class="btn-remove-logo" id="remove-qr-btn" title="Remove QR code">×</button>
+                <img src="" alt="QR Code Preview" class="logo-preview-img" id="qr-preview-img">
+              </div>
+              <input type="file" id="qr-code-file" accept="image/*">
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group" id="group-discount-percentage">
+              <div class="field-label-container">
+                <label for="discount-percentage">Global Discount (%)</label>
+                <button type="button" class="field-toggle-btn" data-field="showDiscount" title="Toggle Discount">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="number" id="discount-percentage" value="0" min="0" max="100" step="0.01">
+            </div>
+            <div class="form-group" id="group-tax-percentage">
+              <div class="field-label-container">
+                <label for="tax-percentage">Global Tax (%)</label>
+                <button type="button" class="field-toggle-btn" data-field="showTax" title="Toggle Tax">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="number" id="tax-percentage" value="0" min="0" max="100" step="0.01">
+            </div>
+            <div class="form-group" id="group-shipping-cost">
+              <div class="field-label-container">
+                <label for="shipping-cost">Shipping & Handling</label>
+                <button type="button" class="field-toggle-btn" data-field="showShipping" title="Toggle Shipping">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+              <input type="text" id="shipping-cost" value="0" inputmode="decimal">
+            </div>
+          </div>
+          <div class="form-group" id="group-invoice-notes">
+            <div class="field-label-container">
+              <label for="invoice-notes">Custom Notes</label>
+              <button type="button" class="field-toggle-btn" data-field="showNotes" title="Toggle Notes">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <textarea id="invoice-notes" placeholder="Thank you for your business!"></textarea>
+          </div>
+          <div class="form-group" id="group-payment-instructions">
+            <div class="field-label-container">
+              <label for="payment-instructions">Payment Instructions</label>
+              <button type="button" class="field-toggle-btn" data-field="showPayment" title="Toggle Payment Info">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <textarea id="payment-instructions" placeholder="Bank: Example Bank&#10;Account: 1234-5678-9012&#10;Routing: 987654321"></textarea>
+          </div>
+          <div class="settings-row grid-2">
+            <div class="form-group no-margin">
+              <label>Notes Position</label>
+              <select id="setting-notes-position" class="layout-setting">
+                <option value="left" selected>Left Side</option>
+                <option value="right">Right Side</option>
+              </select>
+            </div>
+            <div class="form-group no-margin">
+              <label>Notes Align</label>
+              <select id="setting-notes-align" class="layout-setting">
+                <option value="left" selected>Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+          <div class="settings-row grid-2" style="margin-top: 12px;">
+            <div class="form-group no-margin">
+              <label>Payment Info Position</label>
+              <select id="setting-payment-position" class="layout-setting">
+                <option value="right" selected>Right Side</option>
+                <option value="left">Left Side</option>
+              </select>
+            </div>
+            <div class="form-group no-margin">
+              <label>Payment Info Align</label>
+              <select id="setting-payment-align" class="layout-setting">
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right" selected>Right</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Right Column: Real-time Virtual Invoice Paper -->
+    <section class="preview-section">
+      <div class="invoice-scale-wrapper" id="invoice-scale-wrapper">
+        <div class="invoice-paper-wrapper" id="invoice-preview">
+        
+        <!-- Preview Header -->
+        <div class="invoice-preview-header">
+          <div class="invoice-logo-area" id="preview-logo-container">
+            <!-- Logo image inserted here -->
+          </div>
+          <div class="invoice-title-area">
+            <div class="invoice-title">INVOICE</div>
+            <div class="invoice-preview-number" id="preview-invoice-number">INV-0001</div>
+            
+            <div class="invoice-preview-meta">
+              <div class="invoice-meta-label" id="lbl-issue-date">Date:</div>
+              <div class="invoice-meta-val" id="preview-issue-date">YYYY-MM-DD</div>
+              <div class="invoice-meta-label" id="lbl-due-date">Due Date:</div>
+              <div class="invoice-meta-val" id="preview-due-date">YYYY-MM-DD</div>
+              <div class="invoice-meta-label" id="lbl-payment-terms">Terms:</div>
+              <div class="invoice-meta-val" id="preview-payment-terms">Due on Receipt</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Addresses -->
+        <div class="invoice-preview-addresses">
+          <div>
+            <div class="address-block-title">From</div>
+            <div class="address-details" id="preview-sender-details">
+              <strong>diviteit studio</strong><br>
+              hello@diviteit.com<br>
+              +62 812-3456-7890<br>
+              Sudirman Central Business District<br>
+              Jakarta, Indonesia
+            </div>
+          </div>
+          <div>
+            <div class="address-block-title">Bill To</div>
+            <div class="address-details" id="preview-client-details">
+              <em>No client details provided yet.</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="invoice-preview-table-container">
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th style="width: 45%;">Item Description</th>
+                <th style="width: 10%; text-align: right;" id="th-qty">Qty</th>
+                <th style="width: 15%; text-align: right;" id="th-rate">Price</th>
+                <th style="width: 10%; text-align: right;" id="th-tax">Tax</th>
+                <th style="width: 10%; text-align: right;" id="th-discount">Discount</th>
+                <th style="width: 10%; text-align: right;">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="preview-table-body">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Summary -->
+        <div class="invoice-preview-summary-container">
+          <div class="invoice-preview-summary">
+            <div class="summary-row">
+              <div class="summary-label">Subtotal</div>
+              <div class="summary-val" id="preview-subtotal">Rp 0</div>
+            </div>
+            <div class="summary-row" id="preview-row-discount" style="display: none;">
+              <div class="summary-label" id="preview-discount-label">Discount</div>
+              <div class="summary-val" id="preview-discount">Rp 0</div>
+            </div>
+            <div class="summary-row" id="preview-row-tax" style="display: none;">
+              <div class="summary-label" id="preview-tax-label">Tax</div>
+              <div class="summary-val" id="preview-tax">Rp 0</div>
+            </div>
+            <div class="summary-row" id="preview-row-shipping" style="display: none;">
+              <div class="summary-label">Shipping & Handling</div>
+              <div class="summary-val" id="preview-shipping">Rp 0</div>
+            </div>
+            <div class="summary-row total-row">
+              <div class="summary-label">Total Due</div>
+              <div class="summary-val" id="preview-total">Rp 0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="invoice-preview-footer">
+          <div>
+            <div class="address-block-title">Notes</div>
+            <div class="invoice-footer-notes" id="preview-notes">Thank you for your business!</div>
+          </div>
+          <div style="display: flex; gap: 20px; align-items: flex-start; justify-content: flex-end;">
+            <div id="preview-qr-container" style="display: none; flex-direction: column; align-items: center; gap: 6px;">
+              <div class="address-block-title" style="margin-bottom: 4px; text-align: center; width: 100%;">Scan Code</div>
+              <img src="" id="preview-qr-img" style="max-height: 90px; max-width: 90px; object-fit: contain; border-radius: 4px; border: 1px solid #e2e8f0; padding: 2px; background: white;" alt="Payment QR Code">
+            </div>
+            <div>
+              <div class="address-block-title">Payment Info</div>
+              <div class="invoice-footer-payment" id="preview-payment-info">Bank details...</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Toast Notification Wrapper -->
+  <div class="toast" id="toast-notify">
+    <i id="toast-icon"></i>
+    <span id="toast-message">Task completed successfully.</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

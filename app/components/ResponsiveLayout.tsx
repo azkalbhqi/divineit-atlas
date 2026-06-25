@@ -34,6 +34,7 @@ export default function ResponsiveLayout({
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: "🏠" },
+    { href: "/invoices", label: "Invoices", icon: "🧾" },
     ...(user.global_role === "manager"
       ? [
           { href: "/financials", label: "Global Financials", icon: "💳" },
