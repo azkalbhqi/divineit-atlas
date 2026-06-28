@@ -53,7 +53,7 @@ export default function WorkspaceHeader({
             <div className="border-l border-zinc-850 pl-6">
               <p className="text-zinc-500 font-semibold uppercase tracking-wider text-[9px]">Project Budget</p>
               <p className="text-emerald-400 font-bold mt-0.5">
-                ${project.total_budget.toLocaleString()}
+                Rp {project.total_budget.toLocaleString()}
               </p>
             </div>
           )}

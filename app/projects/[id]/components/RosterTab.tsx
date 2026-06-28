@@ -120,7 +120,7 @@ export default function RosterTab({
                     </td>
                     {showRates && (
                       <td className="py-3.5 px-4 font-semibold text-emerald-400">
-                        ${member.hourly_rate}/hr
+                        Rp {member.hourly_rate}/hr
                       </td>
                     )}
                     <td className="py-3.5 px-4 text-zinc-400">
@@ -240,14 +240,14 @@ export default function RosterTab({
 
               <div>
                 <label className="block text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                  Localized Cost Rate ($/hr)
+                  Localized Cost Rate (Rp/hr)
                 </label>
                 <input
                   name="rate"
                   type="number"
                   required
                   min={0}
-                  placeholder="e.g. 110"
+                  placeholder="e.g. 150000"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-650 transition-all text-xs text-white"
                 />
               </div>
@@ -316,7 +316,7 @@ export default function RosterTab({
 
               <div>
                 <label className="block text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                  Localized Cost Rate ($/hr)
+                  Localized Cost Rate (Rp/hr)
                 </label>
                 <input
                   name="rate"
@@ -324,7 +324,7 @@ export default function RosterTab({
                   required
                   min={0}
                   defaultValue={editingMember.hourly_rate}
-                  placeholder="e.g. 110"
+                  placeholder="e.g. 150000"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-650 transition-all text-xs text-white"
                 />
               </div>

@@ -83,3 +83,21 @@ CREATE TABLE project_time_logs (
   description TEXT NOT NULL,
   logged_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 9. Create Company Profile table
+CREATE TABLE company_profile (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  business_name VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  logo_url TEXT,
+  email_address VARCHAR(255),
+  address TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 10. Create Invoices table
+CREATE TABLE invoices (
+  id VARCHAR(50) PRIMARY KEY,
+  pdf_url TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

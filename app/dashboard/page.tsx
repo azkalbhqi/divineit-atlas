@@ -64,7 +64,7 @@ export default async function DashboardPage() {
                 Contract Budget
               </p>
               <p className="text-lg font-bold text-emerald-400 mt-0.5">
-                ${projects.reduce((sum, p) => sum + p.total_budget, 0).toLocaleString()}
+                Rp {projects.reduce((sum, p) => sum + p.total_budget, 0).toLocaleString()}
               </p>
             </div>
             <div className="px-4 py-2 bg-zinc-950/60 rounded-xl">
@@ -72,7 +72,7 @@ export default async function DashboardPage() {
                 Real-Time Costs
               </p>
               <p className="text-lg font-bold text-rose-400 mt-0.5">
-                ${projects.reduce((sum, p) => sum + p.total_cost, 0).toLocaleString()}
+                Rp {projects.reduce((sum, p) => sum + p.total_cost, 0).toLocaleString()}
               </p>
             </div>
           </div>

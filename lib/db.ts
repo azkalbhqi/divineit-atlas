@@ -875,3 +875,81 @@ export async function deleteRosterMember(rosterId: string): Promise<void> {
   }
 }
 
+// Company Profile Interfaces & DB operations
+export interface CompanyProfile {
+  id: string;
+  business_name: string;
+  phone: string;
+  logo_url: string;
+  email_address: string;
+  address: string;
+  created_at: string;
+}
+
+export async function getCompanyProfiles(): Promise<CompanyProfile[]> {
+  const { data, error } = await supabase
+    .from("company_profile")
+    .select("*")
+    .order("business_name", { ascending: true });
+
+  if (error) {
+    console.error("Failed to fetch company profiles:", error.message);
+    return [];
+  }
+  return data || [];
+}
+
+export async function createCompanyProfile(profile: {
+  business_name: string;
+  phone: string;
+  logo_url: string;
+  email_address: string;
+  address: string;
+}): Promise<CompanyProfile> {
+  const { data, error } = await supabase
+    .from("company_profile")
+    .insert([profile])
+    .select()
+    .single();
+
+  if (error || !data) {
+    throw new Error("Failed to create company profile: " + (error?.message || "Unknown error"));
+  }
+  return data as CompanyProfile;
+}
+
+export async function getNextInvoiceNumber(): Promise<string> {
+  const d = new Date();
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  const dateSuffix = `${day}${month}${year}`;
+  const prefix = `INV-%-${dateSuffix}`;
+
+  const { data, error } = await supabase
+    .from("invoices")
+    .select("id")
+    .like("id", prefix);
+
+  if (error) {
+    console.error("Failed to query invoices count:", error.message);
+    return `INV-01-${dateSuffix}`;
+  }
+
+  const count = data ? data.length : 0;
+  const nextOrder = String(count + 1).padStart(2, "0");
+  return `INV-${nextOrder}-${dateSuffix}`;
+}
+
+export async function saveInvoice(id: string, pdfUrl: string): Promise<void> {
+  const { error } = await supabase
+    .from("invoices")
+    .insert([{ id, pdf_url: pdfUrl }]);
+
+  if (error) {
+    throw new Error("Failed to save invoice to database: " + error.message);
+  }
+}
+
+
+

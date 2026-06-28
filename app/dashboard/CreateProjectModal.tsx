@@ -149,7 +149,7 @@ export default function CreateProjectModal() {
 
               <div>
                 <label className="block text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                  Total Contract Budget ($) *
+                  Total Contract Budget (Rp IDR) *
                 </label>
                 <input
                   name="budget"

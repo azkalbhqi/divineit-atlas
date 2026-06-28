@@ -138,7 +138,7 @@ export default async function ProjectFinancialsPage({ params }: PageProps) {
         <div className="glass-panel rounded-2xl p-5 border border-zinc-800 space-y-2">
           <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Contract Budget</p>
           <p className="text-2xl font-extrabold text-white tracking-tight">
-            ${budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            Rp {budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <div className="text-[10px] text-zinc-400 font-semibold uppercase">Initial cap target</div>
         </div>
@@ -147,7 +147,7 @@ export default async function ProjectFinancialsPage({ params }: PageProps) {
         <div className="glass-panel rounded-2xl p-5 border border-zinc-800 space-y-2">
           <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Total Portfolio Cost</p>
           <p className="text-2xl font-extrabold text-white tracking-tight">
-            ${accumulatedCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            Rp {accumulatedCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <div className="text-[10px] text-zinc-400 font-semibold uppercase flex items-center justify-between">
             <span>{burnPct}% of budget burned</span>
@@ -163,7 +163,7 @@ export default async function ProjectFinancialsPage({ params }: PageProps) {
         <div className="glass-panel rounded-2xl p-5 border border-zinc-800 space-y-2">
           <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Labor Cost Burndown</p>
           <p className="text-2xl font-extrabold text-zinc-100 tracking-tight">
-            ${totalLaborCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            Rp {totalLaborCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <div className="text-[10px] text-zinc-400 font-semibold uppercase">
             {laborBreakdown.reduce((sum, lb) => sum + lb.totalHours, 0)} hours logged total
@@ -174,7 +174,7 @@ export default async function ProjectFinancialsPage({ params }: PageProps) {
         <div className="glass-panel rounded-2xl p-5 border border-zinc-800 space-y-2">
           <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Remaining Margin runway</p>
           <p className={`text-2xl font-extrabold tracking-tight ${isOverBudget ? 'text-red-500' : 'text-emerald-400'}`}>
-            ${remaining.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            Rp {remaining.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <div className="text-[10px] font-semibold uppercase">
             {isOverBudget ? (
@@ -217,10 +217,10 @@ export default async function ProjectFinancialsPage({ params }: PageProps) {
                     <tr key={lb.userId} className="hover:bg-zinc-900/10">
                       <td className="py-3 px-3 font-semibold text-white">{lb.userName}</td>
                       <td className="py-3 px-3 text-zinc-400">{lb.projectRole}</td>
-                      <td className="py-3 px-3 text-zinc-550">${Number(lb.hourlyRate).toFixed(2)}/hr</td>
+                      <td className="py-3 px-3 text-zinc-550">Rp {Number(lb.hourlyRate).toFixed(2)}/hr</td>
                       <td className="py-3 px-3 text-center text-zinc-350">{lb.totalHours.toFixed(1)} hrs</td>
                       <td className="py-3 px-3 text-right font-bold text-zinc-200">
-                        ${lb.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        Rp {lb.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
                   ))
@@ -257,12 +257,12 @@ export default async function ProjectFinancialsPage({ params }: PageProps) {
 
               <div>
                 <label className="block text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                  Expense Amount ($ USD) *
+                  Expense Amount (Rp IDR) *
                 </label>
                 <input
                   name="costAmount"
                   type="number"
-                  step="0.01"
+                  step="1"
                   required
                   placeholder="e.g. 249.99"
                   className="w-full px-3 py-2.5 rounded-xl glass-input text-xs"
@@ -283,7 +283,7 @@ export default async function ProjectFinancialsPage({ params }: PageProps) {
             <div className="flex justify-between items-center pb-2 border-b border-zinc-800">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">Logged Expenses</h3>
               <span className="text-[10px] font-semibold text-zinc-400 uppercase">
-                Total: ${totalExpensesCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Total: Rp {totalExpensesCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="space-y-3 max-h-[250px] overflow-y-auto pr-1">
@@ -296,7 +296,7 @@ export default async function ProjectFinancialsPage({ params }: PageProps) {
                       <p className="font-semibold text-white">{exp.label}</p>
                       <p className="text-[10px] text-zinc-550">{new Date(exp.logged_at).toLocaleDateString()}</p>
                     </div>
-                    <span className="font-bold text-zinc-300">${Number(exp.cost_amount).toFixed(2)}</span>
+                    <span className="font-bold text-zinc-300">Rp {Number(exp.cost_amount).toFixed(2)}</span>
                   </div>
                 ))
               )}

@@ -83,17 +83,17 @@ export default async function GlobalFinancialsPage({ searchParams }: PageProps) 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="glass-panel p-5 rounded-2xl border border-zinc-800">
           <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Total Portfolio Budget</p>
-          <p className="text-2xl font-bold text-white mt-1.5">${totalBudget.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-white mt-1.5">Rp {totalBudget.toLocaleString()}</p>
         </div>
 
         <div className="glass-panel p-5 rounded-2xl border border-zinc-800">
           <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Operational Costs (Ops)</p>
-          <p className="text-2xl font-bold text-rose-400 mt-1.5">${totalOperationalCost.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-rose-400 mt-1.5">Rp {totalOperationalCost.toLocaleString()}</p>
         </div>
 
         <div className="glass-panel p-5 rounded-2xl border border-zinc-800">
           <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Labor Expenditures (Dev)</p>
-          <p className="text-2xl font-bold text-indigo-400 mt-1.5">${totalLaborCost.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-indigo-400 mt-1.5">Rp {totalLaborCost.toLocaleString()}</p>
         </div>
 
         <div className="glass-panel p-5 rounded-2xl border border-zinc-800">
@@ -101,7 +101,7 @@ export default async function GlobalFinancialsPage({ searchParams }: PageProps) 
             {totalRemaining >= 0 ? "Portfolio Profit Runway" : "Portfolio Deficit"}
           </p>
           <p className={`text-2xl font-bold mt-1.5 ${totalRemaining >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-            ${totalRemaining.toLocaleString()}
+            Rp {totalRemaining.toLocaleString()}
           </p>
         </div>
       </div>
@@ -111,7 +111,7 @@ export default async function GlobalFinancialsPage({ searchParams }: PageProps) 
         <div className="flex items-center justify-between text-xs font-semibold text-zinc-400 uppercase tracking-wider">
           <span>Global Capital Utilization</span>
           <span className={isOverBudget ? "text-red-400 font-bold" : "text-indigo-400"}>
-            {portfolioUtilizationPct}% spent (${totalSpent.toLocaleString()} of ${totalBudget.toLocaleString()})
+            {portfolioUtilizationPct}% spent (Rp {totalSpent.toLocaleString()} of Rp {totalBudget.toLocaleString()})
           </span>
         </div>
         <div className="w-full h-3 bg-zinc-950 rounded-full overflow-hidden border border-zinc-850 p-0.5 flex">
@@ -159,12 +159,12 @@ export default async function GlobalFinancialsPage({ searchParams }: PageProps) 
                   </td>
                   <td className="py-3.5 px-4 text-zinc-400">{proj.client_name}</td>
                   <td className="py-3.5 px-4 text-zinc-400 font-semibold">{proj.rosterCount} members</td>
-                  <td className="py-3.5 px-4 text-right font-semibold">${Number(proj.total_budget).toLocaleString()}</td>
-                  <td className="py-3.5 px-4 text-right text-rose-450">${proj.operationalCost.toLocaleString()}</td>
-                  <td className="py-3.5 px-4 text-right text-indigo-455">${proj.laborCost.toLocaleString()}</td>
-                  <td className="py-3.5 px-4 text-right font-bold text-white">${proj.accumulatedCost.toLocaleString()}</td>
+                  <td className="py-3.5 px-4 text-right font-semibold">Rp {Number(proj.total_budget).toLocaleString()}</td>
+                  <td className="py-3.5 px-4 text-right text-rose-450">Rp {proj.operationalCost.toLocaleString()}</td>
+                  <td className="py-3.5 px-4 text-right text-indigo-455">Rp {proj.laborCost.toLocaleString()}</td>
+                  <td className="py-3.5 px-4 text-right font-bold text-white">Rp {proj.accumulatedCost.toLocaleString()}</td>
                   <td className={`py-3.5 px-4 text-right font-semibold ${proj.remainingBudget < 0 ? "text-red-400" : "text-emerald-450"}`}>
-                    ${proj.remainingBudget.toLocaleString()}
+                    Rp {proj.remainingBudget.toLocaleString()}
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
