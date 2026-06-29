@@ -39,6 +39,7 @@ export default function ResponsiveLayout({
       ? [
           { href: "/financials", label: "Global Financials", icon: "💳" },
           { href: "/users", label: "Manage Roster", icon: "👥" },
+          { href: "/landing-page", label: "Landing Page", icon: "🌐" },
         ]
       : []),
   ];

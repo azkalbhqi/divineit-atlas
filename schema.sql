@@ -101,3 +101,54 @@ CREATE TABLE invoices (
   pdf_url TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 11. Create Hero Settings table
+CREATE TABLE hero_settings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  subtitle TEXT,
+  cta_text VARCHAR(100),
+  cta_link VARCHAR(255),
+  image_url TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Seed initial row for hero_settings if empty
+INSERT INTO hero_settings (title, subtitle, cta_text, cta_link)
+VALUES ('Premium Digital Solutions', 'We build high-performance web applications tailored to your business needs.', 'Explore Workspaces', '/login');
+
+-- 12. Create Portfolio table
+CREATE TABLE portfolio (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  project_url VARCHAR(2083),
+  image_url TEXT,
+  category VARCHAR(100),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 13. Create Testimonials table
+CREATE TABLE testimonials (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  client_name VARCHAR(255) NOT NULL,
+  client_role VARCHAR(255),
+  client_company VARCHAR(255),
+  testimonial_text TEXT NOT NULL,
+  client_avatar_url TEXT,
+  rating INTEGER CHECK (rating >= 1 AND rating <= 5) DEFAULT 5,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 14. Create Packages table
+CREATE TABLE packages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  price NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+  interval VARCHAR(50) DEFAULT 'monthly',
+  features TEXT[] DEFAULT '{}',
+  is_popular BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
